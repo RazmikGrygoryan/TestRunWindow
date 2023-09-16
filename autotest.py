@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 import pytest
 
 
@@ -26,11 +27,12 @@ def generate_creds():
 # )
 
 
-@pytest.mark.skip
 @pytest.mark.parametrize('creds', generate_creds())
 def test1(creds):
+    options = Options()
+    options.add_argument('--headless')
     login, passw = creds
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 40)
     driver.implicitly_wait(7)
     driver.get('https://tastystrike.com/')
@@ -46,7 +48,9 @@ def test1(creds):
 
 @pytest.fixture()
 def page(request):
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(7)
     param = request.param
     if param == 'offersshop':
@@ -58,11 +62,15 @@ def page(request):
 
 @pytest.mark.parametrize('page', ['offersshop'], indirect=True)
 def test_offersshop(page):
+    options = Options()
+    options.add_argument('--headless')
     title = page.find_element(By.CSS_SELECTOR, '[class="offershop-heading"]')
     assert title.text == 'SECRET STORE'
 
 
 @pytest.mark.parametrize('page', ['contract'], indirect=True)
 def test_contract(page):
+    options = Options()
+    options.add_argument('--headless')
     title = page.find_element(By.CSS_SELECTOR, 'h1')
     assert title.text == 'КОНТРАКТЫ TASTYSTRIKE'
