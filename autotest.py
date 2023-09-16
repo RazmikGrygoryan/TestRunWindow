@@ -69,7 +69,7 @@ def test_offersshop(page):
 
 
 @pytest.mark.parametrize('page', ['contract'], indirect=True)
-def test_contract(page):
+def test_contract_2(page):
     options = Options()
     options.add_argument('--headless')
     title = page.find_element(By.CSS_SELECTOR, 'h1')
